@@ -109,7 +109,7 @@ class ProxyThread implements Runnable {
                     out.write((entry.getKey()+":"+entry.getValue()).getBytes());
                     out.write("\n".getBytes());
                 }
-
+                out.write("\n".getBytes());
 
                 InputStream is = conn.getInputStream();
 
