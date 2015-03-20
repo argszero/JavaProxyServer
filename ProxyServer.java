@@ -104,11 +104,15 @@ class ProxyThread implements Runnable {
 
                 Map<String, List<String>> map = conn.getHeaderFields();
                 for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-                    System.out.println("Key : " + entry.getKey() +
-                            " ,Value : " + entry.getValue());
-                    out.write((entry.getKey()+":"+entry.getValue()).getBytes());
-                    out.write("\n".getBytes());
+                    for(String v:entry.getValue()){
+                        System.out.println("Key : " + entry.getKey() +
+                                " ,Value : " + v);
+                        out.write((entry.getKey()+":"+v).getBytes());
+                        out.write("\n".getBytes());
+                    }
+
                 }
+                out.write("\n".getBytes());
                 out.write("\n".getBytes());
 
                 InputStream is = conn.getInputStream();
