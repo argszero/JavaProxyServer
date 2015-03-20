@@ -84,7 +84,7 @@ class ProxyThread implements Runnable {
                 }
                 for (String k : new String[]{
                         "Host",
-//                        "Proxy-Connection",
+                        "Proxy-Connection",
 //                        "Pragma",
 //                        "Cache-Control",
 //                        "Accept",
