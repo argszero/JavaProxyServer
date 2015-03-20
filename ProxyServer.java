@@ -3,6 +3,7 @@ import java.net.HttpURLConnection;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,9 +71,26 @@ class ProxyThread implements Runnable {
                 }
                 matcher = emptyPattern.matcher(line);
                 if (matcher.matches()) {
-//                    break;
+                    break;
                 }
             }
+            String contentLength = headers.get("Content-Length");
+            char[] body;
+            if (contentLength != null) {
+                int length = Integer.parseInt(contentLength);
+                body = new char[length];
+                in.read(body);
+            } else {
+                List<Character> cs = new ArrayList<Character>();
+                for (int i = in.read(); i != -1; i = in.read()) {
+                    cs.add((char) i);
+                }
+                body = new char[cs.size()];
+                for (int i = 0; i < body.length; i++) {
+                    body[i] = cs.get(i);
+                }
+            }
+
             System.out.println("url:" + url);
             System.out.println("\n\n\n********************" + log.toString() + "\n*********************");
             if (url == null) {
@@ -81,8 +99,8 @@ class ProxyThread implements Runnable {
                 HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
                 conn.setInstanceFollowRedirects(false);
                 conn.setDoInput(true);
-                conn.setDoOutput(false);
-                if(method!=null){
+                conn.setDoOutput(true);
+                if (method != null) {
                     conn.setRequestMethod(method);
                 }
                 for (String k : new String[]{
@@ -101,6 +119,9 @@ class ProxyThread implements Runnable {
                     if (value != null) {
                         conn.setRequestProperty(k, value);
                     }
+                }
+                for(char i :body){
+                    conn.getOutputStream().write(i);
                 }
 
                 conn.getResponseMessage();
