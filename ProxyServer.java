@@ -78,6 +78,7 @@ class ProxyThread implements Runnable {
                 out.writeBytes("");
             } else {
                 HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+                conn.setInstanceFollowRedirects(false);
                 conn.setDoInput(true);
                 conn.setDoOutput(false);
                 for (Map.Entry<String, String> header : headers.entrySet()) {
@@ -104,7 +105,7 @@ class ProxyThread implements Runnable {
 
                 conn.getResponseMessage();
 
-                out.write(("HTTP/1.1 "+conn.getResponseCode()+" "+conn.getResponseMessage()+"\r\n").getBytes());
+                out.write(("HTTP/1.1 " + conn.getResponseCode() + " " + conn.getResponseMessage() + "\r\n").getBytes());
                 Map<String, List<String>> map = conn.getHeaderFields();
                 for (String k : new String[]{"Connection","Content-Length","Content-Type","Date","Location","Server","Set-Cookie","Via","X-Cache"}) {
                     List<String> vs = map.get(k);
