@@ -80,7 +80,7 @@ class ProxyThread implements Runnable {
                 body=new char[0];
             }else{
                 if (contentLength != null) {
-                    int length = Integer.parseInt(contentLength);
+                    int length = Integer.parseInt(contentLength.trim());
                     body = new char[length];
                     in.read(body);
                 } else {
