@@ -91,7 +91,7 @@ class ProxyThread implements Runnable {
                         "Accept-Encoding",
                         "Accept-Language",
                         "Cookie",
-//                        ""
+                        ""
                 }) {
                     String value = headers.get(k);
                     if (value != null) {
@@ -104,7 +104,23 @@ class ProxyThread implements Runnable {
 
                 out.write(("HTTP/1.1 " + conn.getResponseCode() + " " + conn.getResponseMessage() + "\r\n").getBytes());
                 Map<String, List<String>> map = conn.getHeaderFields();
-                for (String k : new String[]{"Connection","Content-Length","Content-Type","Date","Location","Server","Set-Cookie","Via","X-Cache"}) {
+                for (String k : new String[]{"",
+                        "Accept-Ranges",
+                        "Cache-Control",
+                        "Connection",
+                        "Content-Encoding",
+                        "Content-Length",
+                        "Content-Type",
+                        "Date",
+                        "Expires",
+                        "Last-Modified",
+                        "Location",
+                        "Server",
+                        "Set-Cookie",
+                        "Vary",
+                        "Via",
+                        "X-Cache",
+                        ""}) {
                     List<String> vs = map.get(k);
                     if (vs != null) {
                         for (String v : vs) {
