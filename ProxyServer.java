@@ -96,7 +96,6 @@ class ProxyThread implements Runnable {
                     String value = headers.get(k);
                     if (value != null) {
                         conn.setRequestProperty(k, value);
-                        System.out.println(k + "--" + headers.get(k));
                     }
                 }
 
