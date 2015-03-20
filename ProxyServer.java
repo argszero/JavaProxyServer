@@ -1,4 +1,3 @@
-import javax.crypto.Mac;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.ServerSocket;
@@ -54,7 +53,7 @@ class ProxyThread implements Runnable {
             String method;
             String url = null;
             String protocal;
-            Map<String,String> headers = new HashMap<String, String>();
+            Map<String, String> headers = new HashMap<String, String>();
             for (String line = in.readLine(); line != null; line = in.readLine()) {
                 log.append(line).append("\n");
                 Matcher matcher = urlPattern.matcher(line);
@@ -65,10 +64,10 @@ class ProxyThread implements Runnable {
                 }
                 matcher = headerPattern.matcher(line);
                 if (matcher.matches()) {
-                    headers.put(matcher.group(1),matcher.group(2));
+                    headers.put(matcher.group(1), matcher.group(2));
                 }
                 matcher = emptyPattern.matcher(line);
-                if(matcher.matches()){
+                if (matcher.matches()) {
                     break;
                 }
             }
@@ -80,21 +79,25 @@ class ProxyThread implements Runnable {
                 HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
                 conn.setDoInput(true);
                 conn.setDoOutput(false);
-                for(Map.Entry<String,String> header:headers.entrySet()){
+                for (Map.Entry<String, String> header : headers.entrySet()) {
 //                    conn.setRequestProperty(header.getKey(), header.getValue());
                 }
-                for(String k:new String[]{"Host",
-                        "Proxy-Connection",
-                        "Pragma",
-                        "Cache-Control",
-                        "Accept",
-                        "User-Agent",
-//                        "Accept-Encoding",
-                        "Accept-Language","Cookie"}){
+                for (String k : new String[]{
+                        "Host",
+//                        "Proxy-Connection",
+//                        "Pragma",
+//                        "Cache-Control",
+//                        "Accept",
+//                        "User-Agent",
+////                        "Accept-Encoding",
+//                        "Accept-Language",
+//                        "Cookie",
+//                        ""
+                }) {
                     String value = headers.get(k);
-                    if(value!=null){
+                    if (value != null) {
                         conn.setRequestProperty(k, value);
-                        System.out.println(k+"--"+headers.get(k));
+                        System.out.println(k + "--" + headers.get(k));
                     }
                 }
 
