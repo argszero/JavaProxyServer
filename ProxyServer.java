@@ -86,7 +86,7 @@ class ProxyThread implements Runnable {
                         "Host",
                         "Proxy-Connection",
                         "Pragma",
-//                        "Cache-Control",
+                        "Cache-Control",
 //                        "Accept",
 //                        "User-Agent",
 ////                        "Accept-Encoding",
