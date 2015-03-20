@@ -4,6 +4,8 @@ import java.net.HttpURLConnection;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
@@ -47,10 +49,12 @@ class ProxyThread implements Runnable {
             out = new DataOutputStream(socket.getOutputStream());
             StringBuffer log = new StringBuffer();
             Pattern urlPattern = Pattern.compile("((?:GET)|(?:POST)) (\\S*) (.*)");//GET http://www.baidu.com HTTP/1.1
+            Pattern headerPattern = Pattern.compile("([^:]*):(.*)");
             Pattern emptyPattern = Pattern.compile("\\s*");
             String method;
             String url = null;
             String protocal;
+            Map<String,String> headers = new HashMap<String, String>();
             for (String line = in.readLine(); line != null; line = in.readLine()) {
                 log.append(line).append("\n");
                 Matcher matcher = urlPattern.matcher(line);
@@ -58,6 +62,10 @@ class ProxyThread implements Runnable {
                     method = matcher.group(1);
                     url = matcher.group(2);
                     protocal = matcher.group(3);
+                }
+                matcher = headerPattern.matcher(line);
+                if (matcher.matches()) {
+                    headers.put(matcher.group(1),matcher.group(2));
                 }
                 matcher = emptyPattern.matcher(line);
                 if(matcher.matches()){
@@ -72,6 +80,9 @@ class ProxyThread implements Runnable {
                 HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
                 conn.setDoInput(true);
                 conn.setDoOutput(false);
+                for(Map.Entry<String,String> header:headers.entrySet()){
+                    conn.setRequestProperty(header.getKey(), header.getValue());
+                }
 //                conn.setRequestProperty("Cookie", "cna="+cookie+"");
                 InputStream is = conn.getInputStream();
 
