@@ -1,3 +1,4 @@
+import javax.crypto.Mac;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.ServerSocket;
@@ -46,6 +47,7 @@ class ProxyThread implements Runnable {
             out = new DataOutputStream(socket.getOutputStream());
             StringBuffer log = new StringBuffer();
             Pattern urlPattern = Pattern.compile("((?:GET)|(?:POST)) (\\S*) (.*)");//GET http://www.baidu.com HTTP/1.1
+            Pattern emptyPattern = Pattern.compile("\\s*");
             String method;
             String url = null;
             String protocal;
@@ -56,6 +58,10 @@ class ProxyThread implements Runnable {
                     method = matcher.group(1);
                     url = matcher.group(2);
                     protocal = matcher.group(3);
+                }
+                matcher = emptyPattern.matcher(line);
+                if(matcher.matches()){
+                    break;
                 }
             }
             System.out.println("url:" + url);
