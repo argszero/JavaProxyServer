@@ -102,17 +102,9 @@ class ProxyThread implements Runnable {
                     }
                 }
 
+                conn.getResponseMessage();
 
-//                for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-//                    for(String v:entry.getValue()){
-//                        System.out.println("Key : " + entry.getKey() +
-//                                " ,Value : " + v);
-//                        out.write((entry.getKey()+":"+v).getBytes());
-//                        out.write("\r\n".getBytes());
-//                    }
-//
-//                }
-                out.write("HTTP/1.1 200 OK\r\n".getBytes());
+                out.write(("HTTP/1.1 "+conn.getResponseCode()+" "+conn.getResponseMessage()+"\r\n").getBytes());
                 Map<String, List<String>> map = conn.getHeaderFields();
                 for (String k : new String[]{"Connection","Content-Length","Content-Type","Date","Location","Server","Set-Cookie","Via","X-Cache"}) {
                     List<String> vs = map.get(k);
