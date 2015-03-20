@@ -51,7 +51,7 @@ class ProxyThread implements Runnable {
             Pattern urlPattern = Pattern.compile("((?:GET)|(?:POST)) (\\S*) (.*)");//GET http://www.baidu.com HTTP/1.1
             Pattern headerPattern = Pattern.compile("([^:]*):(.*)");
             Pattern emptyPattern = Pattern.compile("\\s*");
-            String method;
+            String method = null;
             String url = null;
             String protocal;
             Map<String, String> headers = new HashMap<String, String>();
@@ -69,7 +69,7 @@ class ProxyThread implements Runnable {
                 }
                 matcher = emptyPattern.matcher(line);
                 if (matcher.matches()) {
-                    break;
+//                    break;
                 }
             }
             System.out.println("url:" + url);
@@ -81,6 +81,9 @@ class ProxyThread implements Runnable {
                 conn.setInstanceFollowRedirects(false);
                 conn.setDoInput(true);
                 conn.setDoOutput(false);
+                if(method!=null){
+                    conn.setRequestMethod(method);
+                }
                 for (String k : new String[]{
                         "Host",
                         "Proxy-Connection",
