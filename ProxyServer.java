@@ -56,6 +56,7 @@ class ProxyThread implements Runnable {
             String protocal;
             Map<String, String> headers = new HashMap<String, String>();
             for (String line = in.readLine(); line != null; line = in.readLine()) {
+                System.out.println(line);
                 log.append(line).append("\n");
                 Matcher matcher = urlPattern.matcher(line);
                 if (matcher.matches()) {
