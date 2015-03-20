@@ -83,9 +83,12 @@ class ProxyThread implements Runnable {
                 for(Map.Entry<String,String> header:headers.entrySet()){
 //                    conn.setRequestProperty(header.getKey(), header.getValue());
                 }
-                for(String k:new String[]{"Cookie","Accept-Language","Accept-Encoding"}){
-                    conn.setRequestProperty(k, headers.get(k));
-                    System.out.println(k+"--"+headers.get(k));
+                for(String k:new String[]{"Accept","Accept-Encoding","Accept-Language"}){
+                    String value = headers.get(k);
+                    if(value!=null){
+                        conn.setRequestProperty(k, value);
+                        System.out.println(k+"--"+headers.get(k));
+                    }
                 }
 
                 InputStream is = conn.getInputStream();
