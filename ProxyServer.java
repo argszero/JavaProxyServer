@@ -4,6 +4,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -100,6 +101,13 @@ class ProxyThread implements Runnable {
                         System.out.println(k + "--" + headers.get(k));
                     }
                 }
+
+                Map<String, List<String>> map = conn.getHeaderFields();
+                for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+                    System.out.println("Key : " + entry.getKey() +
+                            " ,Value : " + entry.getValue());
+                }
+
 
                 InputStream is = conn.getInputStream();
 
