@@ -76,20 +76,25 @@ class ProxyThread implements Runnable {
             }
             String contentLength = headers.get("Content-Length");
             char[] body;
-            if (contentLength != null) {
-                int length = Integer.parseInt(contentLength);
-                body = new char[length];
-                in.read(body);
-            } else {
-                List<Character> cs = new ArrayList<Character>();
-                for (int i = in.read(); i != -1; i = in.read()) {
-                    cs.add((char) i);
-                }
-                body = new char[cs.size()];
-                for (int i = 0; i < body.length; i++) {
-                    body[i] = cs.get(i);
+            if("GET".equals(method)){
+                body=new char[0];
+            }else{
+                if (contentLength != null) {
+                    int length = Integer.parseInt(contentLength);
+                    body = new char[length];
+                    in.read(body);
+                } else {
+                    List<Character> cs = new ArrayList<Character>();
+                    for (int i = in.read(); i != -1; i = in.read()) {
+                        cs.add((char) i);
+                    }
+                    body = new char[cs.size()];
+                    for (int i = 0; i < body.length; i++) {
+                        body[i] = cs.get(i);
+                    }
                 }
             }
+
 
             System.out.println("url:" + url);
             System.out.println("\n\n\n********************" + log.toString() + "\n*********************");
