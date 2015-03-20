@@ -106,6 +106,8 @@ class ProxyThread implements Runnable {
                 for (Map.Entry<String, List<String>> entry : map.entrySet()) {
                     System.out.println("Key : " + entry.getKey() +
                             " ,Value : " + entry.getValue());
+                    out.write((entry.getKey()+":"+entry.getValue()).getBytes());
+                    out.write("\n".getBytes());
                 }
 
 
