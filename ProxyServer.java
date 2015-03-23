@@ -1,8 +1,5 @@
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.URL;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -137,6 +134,9 @@ class ProxyThread implements Runnable {
                 } catch (FileNotFoundException e) {
                     responseCode = 404;
                     responseMessage = "Not Found";
+                } catch (SocketException e){
+                    responseCode = 500;
+                    responseMessage = "Connection reset by peer:"+url;
                 }
                 out.write(("HTTP/1.1 " + responseCode + " " + responseMessage + "\r\n").getBytes());
                 Map<String, List<String>> map = conn.getHeaderFields();
