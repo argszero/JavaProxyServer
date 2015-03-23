@@ -129,9 +129,16 @@ class ProxyThread implements Runnable {
                     conn.getOutputStream().write(i);
                 }
 
-                conn.getResponseMessage();
-
-                out.write(("HTTP/1.1 " + conn.getResponseCode() + " " + conn.getResponseMessage() + "\r\n").getBytes());
+                int responseCode = 0;
+                String responseMessage = null;
+                try {
+                    responseCode = conn.getResponseCode();
+                    responseMessage = conn.getResponseMessage();
+                } catch (FileNotFoundException e) {
+                    responseCode = 404;
+                    responseMessage = "Not Found";
+                }
+                out.write(("HTTP/1.1 " + responseCode + " " + responseMessage + "\r\n").getBytes());
                 Map<String, List<String>> map = conn.getHeaderFields();
                 for (String k : new String[]{"",
                         "Accept-Ranges",
